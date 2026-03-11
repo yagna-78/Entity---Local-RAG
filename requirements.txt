@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+chromadb
+sentence-transformers
+ollama
+numpy
+pypdf
+python-multipart
+psycopg2-binary
+sqlalchemy
+pandas
+python-dotenv

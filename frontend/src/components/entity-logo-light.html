@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>entity_</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300&family=DM+Serif+Text:ital@1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+
+
+  .logo {
+    display: flex;
+    align-items: baseline;
+    animation: up 1.2s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* entit — Space Grotesk light */
+  .part-a {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    color: #111;
+    letter-spacing: -0.03em;
+  }
+
+  /* y — DM Serif italic, drops below baseline */
+  .letter-y {
+    font-family: 'DM Serif Text', serif;
+    font-style: italic;
+    font-size: clamp(3.6rem, 10.8vw, 7.8rem);
+    color: #111;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    position: relative;
+    top: 0.08em;
+  }
+
+  /* underscore — blink, matches part-a */
+  .cursor {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    color: #111;
+    letter-spacing: -0.03em;
+    margin-left: 2px;
+    animation:
+      up 1.2s 0.3s cubic-bezier(0.16,1,0.3,1) both,
+      blink 1s 1.8s step-start infinite;
+  }
+
+  @keyframes blink {
+    0%, 49%  { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo">
+      <span class="part-a">entit</span><span class="letter-y">y</span><span class="cursor">_</span>
+    </div>
+
+  </div>
+</body>
+</html>

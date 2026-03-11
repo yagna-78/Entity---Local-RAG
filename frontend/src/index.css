@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  zoom: 0.8;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ededed;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Cherry Red Gradient Animation */
+.bg-cherry-gradient {
+  background: linear-gradient(135deg, #000000 0%, #1a0505 50%, #3d0000 100%);
+}
+
+/* Markdown Styling overrides */
+.prose pre {
+  background-color: #1e1e1e !important;
+  border-radius: 0.5rem;
+}
+
+.prose code {
+  color: #ff4d4d !important;
+  /* Cherry Red text for inline code */
+}
+
+/* Structural Grid Depth Theme */
+.bg-grid-depth {
+  background-color: #050505;
+  background-image:
+    linear-gradient(to right, #1c1c1c 1px, transparent 1px),
+    linear-gradient(to bottom, #1c1c1c 1px, transparent 1px);
+  background-size: 40px 40px;
+  position: relative;
+}
+
+/* Light Mode Structural Grid */
+.bg-grid-depth-light {
+  background-color: #f8fafc;
+  background-image:
+    linear-gradient(to right, #e8ecf1 1px, transparent 1px),
+    linear-gradient(to bottom, #e8ecf1 1px, transparent 1px);
+  background-size: 40px 40px;
+  position: relative;
+}
+
+/* Vignette / Depth Overlay */
+.bg-grid-depth::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Light Mode Vignette */
+.bg-grid-depth-light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.08) 100%);
+  /* Softer vignette */
+  pointer-events: none;
+  z-index: 0;
+}
