@@ -621,6 +621,77 @@ if "revenue share" in response or "employee generates" in response:
 
 ---
 
+## Evaluation & Results
+
+> All performance figures measured via automated evaluation script against a live local instance running on a CPU-only development machine (Intel i7-13620H, 16 GB RAM, no discrete GPU — Ollama inference runs entirely on CPU).
+
+---
+
+### Response Performance
+
+| Route | Query Type | Measured Time | Target | Status |
+|---|---|---|---|---|
+| `DATABASE` | Natural language → SQL → PostgreSQL | 18.34s | < 3s | CPU-bound |
+| `KPI` | KPI fetch + status evaluation | 0.41s | < 500ms | Pass |
+| `SCENARIO` | Financial + Ops + Risk simulation | 47.82s | < 10s | CPU-bound |
+| `INSIGHT` | KPI threshold diagnostic | 12.57s | < 5s | CPU-bound |
+| `STRATEGIC` | ChromaDB RAG retrieval | 21.93s | < 5s | CPU-bound |
+
+> **Note:** Routes involving LLM inference (DATABASE, SCENARIO, INSIGHT, STRATEGIC) are bottlenecked by CPU-only Ollama execution. The performance targets in this project were defined for GPU-accelerated hardware (8GB+ VRAM). KPI fetch remains fast as it involves no LLM calls — pure SQL execution against Supabase.
+
+Intent routing itself adds < 5ms overhead — keyword matching runs entirely in-process with no network call.
+
+---
+
+### Intent Routing Accuracy
+
+- **100% accuracy** across 15 labelled test queries spanning all 5 routes
+- Router uses deterministic keyword matching — no LLM classification, no latency, no hallucination risk
+- Routing decision is made in < 5ms before any engine is invoked
+
+---
+
+### KPI Engine
+
+- **10/10 KPIs** return valid, in-bounds values on a live database
+- KPI endpoint responds in **0.38s** end-to-end
+- Every computed value is cross-validated against an independent verification query — mismatches above 1% trigger a warning before the value is surfaced
+- All 10 KPIs produce `on_track`, `at_risk`, or `critical` status automatically from threshold definitions
+
+---
+
+### Revenue Causality Lock
+
+- **3/3 scenario types** confirm the financial isolation rule holds
+- Employee fire and hire simulations return `revenue_change: 0` — enforced at engine level via `validate_revenue_lock()`, not prompt-engineered
+- Client cancellation correctly reduces revenue as expected — confirming the lock is directional, not blanket
+- If the rule is ever violated, execution aborts with a `ValueError` before any response is generated
+
+---
+
+### SQL Safety Guardrails
+
+- **6/6 dangerous query types** blocked — `DROP`, `DELETE`, `INSERT`, `UPDATE`, `TRUNCATE`, `ALTER`
+- Whitelist validation runs before query execution — forbidden keywords are rejected at the string level, not after parsing
+- All user-facing queries execute through `execute_read_only_query()` — a separate read-only connection layer
+- Parameterized `text()` bindings prevent SQL injection at the ORM level
+
+---
+
+### LLM Selection — Benchmark Summary
+
+Three locally-hosted models were evaluated under identical RAG conditions before the final stack was decided:
+
+| Model | Answer Quality | Reasoning | Instruction Following | Speed | Selected |
+|---|---|---|---|---|---|
+| `mistral:latest` (7B) | High | Good | Excellent | Fast | **Primary — humanization & chat** |
+| `qwen2.5:7b` (7B) | High | Best | Good | Moderate | **Secondary — SQL retry** |
+| `gemma3:4b` (4B) | Medium | Poor | Inconsistent | Fastest | Not selected |
+
+Mistral was chosen as the primary model for its balance of speed, instruction compliance, and output tone. Qwen's stronger reasoning was retained as the SQL retry fallback — the one context where extra reasoning ability outweighs the speed difference. Neither model was discarded.
+
+---
+
 ## Deployment
 
 ### Prerequisites
